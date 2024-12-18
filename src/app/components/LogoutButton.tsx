@@ -8,11 +8,15 @@ export function LogoutButton() {
   const handleLogout = async () => {
     if (client) {
       await client.signOutUser();
-      localStorage.removeItem('userData');
-      window.location.reload();
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('userData');
+        window.location.reload();
+      }
     }
   };
 
+  if (typeof window === 'undefined') return null;
+  
   const isAuthenticated = !!localStorage.getItem('userData');
   if (!isAuthenticated) return null;
 

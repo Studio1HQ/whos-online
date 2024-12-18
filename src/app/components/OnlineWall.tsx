@@ -35,6 +35,9 @@ export function OnlineWall() {
     );
   }
 
+  // Safely access localStorage
+  if (typeof window === 'undefined') return null;
+  
   // Get current user data from localStorage
   const currentUserData = localStorage.getItem('userData');
   const currentUser = currentUserData ? JSON.parse(currentUserData) : null;

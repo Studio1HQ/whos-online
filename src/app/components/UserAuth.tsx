@@ -22,12 +22,18 @@ const getContrastColor = (backgroundColor: string) => {
 
 export function UserAuth() {
   const { client } = useVeltClient();
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return !!localStorage.getItem('userData');
-  });
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsAuthenticated(!!localStorage.getItem('userData'));
+    }
+  }, []);
 
   useEffect(() => {
     const initializeUser = async () => {
+      if (typeof window === 'undefined') return;
+      
       const savedUser = localStorage.getItem('userData');
       if (savedUser && client) {
         const userData: UserData = JSON.parse(savedUser);
@@ -58,7 +64,9 @@ export function UserAuth() {
       textColor: getContrastColor(backgroundColor)
     };
 
-    localStorage.setItem('userData', JSON.stringify(userData));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('userData', JSON.stringify(userData));
+    }
     await client.identify(userData as User);
     client.setDocument('whos-online-wall', {documentName: 'Who\'s Online?'});
     setIsAuthenticated(true);
