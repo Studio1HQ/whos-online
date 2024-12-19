@@ -1,6 +1,7 @@
 'use client'
 
 import { useVeltClient, usePresenceUsers } from '@veltdev/react';
+import { VeltCursor } from '@veltdev/react';
 import { motion } from 'framer-motion';
 
 export function OnlineWall() {
@@ -50,70 +51,73 @@ export function OnlineWall() {
   });
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 p-4">
-      {sortedUsers?.map((user) => {
-        const isCurrentUser = user.userId === currentUser?.userId;
+    <>
+      <VeltCursor />
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 p-4">
+        {sortedUsers?.map((user) => {
+          const isCurrentUser = user.userId === currentUser?.userId;
 
-        return (
-          <motion.div
-            key={user.userId}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            whileHover={{ scale: 1.05 }}
-            className="relative group"
-          >
-            {isCurrentUser && (
-              <div className="absolute -top-2 -right-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full z-10 shadow-lg">
-                You
-              </div>
-            )}
-            <div 
-              className={`rounded-lg p-4 h-full shadow-lg transition-all duration-300 group-hover:shadow-xl
-                ${isCurrentUser ? 'ring-2 ring-blue-500 ring-offset-2 ring-offset-background' : ''}`}
-              style={{ 
-                backgroundColor: user.color || '#f0f0f0',
-                color: user.textColor || '#000000'
-              }}
+          return (
+            <motion.div
+              key={user.userId}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              whileHover={{ scale: 1.05 }}
+              className="relative group"
             >
-              <div className="flex items-center space-x-3">
-                {user.photoUrl ? (
-                  <img 
-                    src={user.photoUrl} 
-                    alt={user.name}
-                    className="w-12 h-12 rounded-full border-2 border-white/30"
-                  />
-                ) : (
-                  <div 
-                    className="w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold border-2 border-white/30"
-                    style={{ backgroundColor: 'rgba(255, 255, 255, 0.2)' }}
-                  >
-                    {user.name?.charAt(0).toUpperCase()}
+              {isCurrentUser && (
+                <div className="absolute -top-2 -right-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full z-10 shadow-lg">
+                  You
+                </div>
+              )}
+              <div 
+                className={`rounded-lg p-4 h-full shadow-lg transition-all duration-300 group-hover:shadow-xl
+                  ${isCurrentUser ? 'ring-2 ring-blue-500 ring-offset-2 ring-offset-background' : ''}`}
+                style={{ 
+                  backgroundColor: user.color || '#f0f0f0',
+                  color: user.textColor || '#000000'
+                }}
+              >
+                <div className="flex items-center space-x-3">
+                  {user.photoUrl ? (
+                    <img 
+                      src={user.photoUrl} 
+                      alt={user.name}
+                      className="w-12 h-12 rounded-full border-2 border-white/30"
+                    />
+                  ) : (
+                    <div 
+                      className="w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold border-2 border-white/30"
+                      style={{ backgroundColor: 'rgba(255, 255, 255, 0.2)' }}
+                    >
+                      {user.name?.charAt(0).toUpperCase()}
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold truncate">{user.name}</h3>
+                    <p className="text-sm opacity-75 truncate">{user.email}</p>
                   </div>
-                )}
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold truncate">{user.name}</h3>
-                  <p className="text-sm opacity-75 truncate">{user.email}</p>
+                </div>
+                
+                <div className="mt-3 flex items-center">
+                  <motion.div
+                    className="w-2 h-2 rounded-full bg-green-400 mr-2"
+                    animate={{
+                      scale: [1, 1.2, 1],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                    }}
+                  />
+                  <span className="text-sm">Online now</span>
                 </div>
               </div>
-              
-              <div className="mt-3 flex items-center">
-                <motion.div
-                  className="w-2 h-2 rounded-full bg-green-400 mr-2"
-                  animate={{
-                    scale: [1, 1.2, 1],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                  }}
-                />
-                <span className="text-sm">Online now</span>
-              </div>
-            </div>
-          </motion.div>
-        );
-      })}
-    </div>
+            </motion.div>
+          );
+        })}
+      </div>
+    </>
   );
 }
