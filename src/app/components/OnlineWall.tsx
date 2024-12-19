@@ -3,6 +3,10 @@
 import { useVeltClient, usePresenceUsers } from '@veltdev/react';
 import { VeltCursor } from '@veltdev/react';
 import { motion } from 'framer-motion';
+import { 
+  VeltComments,
+  VeltCommentTool 
+} from '@veltdev/react';
 
 export function OnlineWall() {
   const { client } = useVeltClient();
@@ -53,6 +57,10 @@ export function OnlineWall() {
   return (
     <>
       <VeltCursor />
+      <VeltComments />
+      <div className="fixed bottom-4 right-4 z-50">
+        <VeltCommentTool />
+      </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 p-4">
         {sortedUsers?.map((user) => {
           const isCurrentUser = user.userId === currentUser?.userId;
