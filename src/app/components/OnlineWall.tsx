@@ -54,6 +54,20 @@ export function OnlineWall() {
     return 0;
   });
 
+  // Add this helper function inside the component
+  const getStatusConfig = (status: string) => {
+    switch (status) {
+      case 'online':
+        return { color: 'bg-green-400', text: 'Online now' };
+      case 'away':
+        return { color: 'bg-yellow-400', text: 'Away' };
+      case 'offline':
+        return { color: 'bg-gray-400', text: 'Offline' };
+      default:
+        return { color: 'bg-gray-400', text: 'Unknown' };
+    }
+  };
+
   return (
     <>
       <VeltCursor />
@@ -64,6 +78,7 @@ export function OnlineWall() {
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 p-4">
         {sortedUsers?.map((user) => {
           const isCurrentUser = user.userId === currentUser?.userId;
+          const status = getStatusConfig(user.onlineStatus);
 
           return (
             <motion.div
@@ -110,16 +125,16 @@ export function OnlineWall() {
                 
                 <div className="mt-3 flex items-center">
                   <motion.div
-                    className="w-2 h-2 rounded-full bg-green-400 mr-2"
+                    className={`w-2 h-2 rounded-full ${status.color} mr-2`}
                     animate={{
-                      scale: [1, 1.2, 1],
+                      scale: user.onlineStatus === 'active' ? [1, 1.2, 1] : 1,
                     }}
                     transition={{
                       duration: 2,
-                      repeat: Infinity,
+                      repeat: user.onlineStatus === 'active' ? Infinity : 0,
                     }}
                   />
-                  <span className="text-sm">Online now</span>
+                  <span className="text-sm">{status.text}</span>
                 </div>
               </div>
             </motion.div>
